@@ -7,7 +7,7 @@ import os
 import bleach
 
 app = Flask(__name__)
-app.secret_key = os.environ['MONGO_CLIENT']
+app.secret_key = os.environ['FLASK_SECRET']
 app.config["SESSION_TYPE"] = "filesystem"
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
