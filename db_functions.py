@@ -2,7 +2,8 @@ import pymongo, uuid, hashlib
 from pymongo import MongoClient
 from datetime import datetime
 from markupsafe import escape
-cluster = MongoClient()
+import os
+cluster = MongoClient(os.environ['MONGO_CLIENT'])
 db = cluster["ARSNews"]
 user_info = db["user-info"]
 posts = db["posts"]
@@ -16,26 +17,26 @@ class userFunctions():
     def calc_sha(self, input_string):
         hashString = hashlib.sha256(input_string.encode()).hexdigest()
         return str(hashString)
-    
+
     def checkID(self, typeID, value):
         if user_info.find_one({typeID: value}):
             return True
         else:
             return False
-    
+
     def listUser(self):
         users = []
         for i in user_info.find({}):
             users.append(i)
         return users
-    
+
     def deleteUser(self, id):
         user_info.delete_one({"_id": id})
 
     def addUser(self, username, password):
         specialID = str(uuid.uuid4())
         sessionID = str(uuid.uuid4())
-        while self.checkID("_id", specialID) == False and self.checkID("sessionID", self.calc_sha(sessionID)) == True:
+        while self.checkID("_id", specialID) == False and self.checkID("sessionID",self.calc_sha(sessionID)) == True:
             specialID = str(uuid.uuid4())
             sessionID = str(uuid.uuid4())
         if self.checkID("username", username ) == False:
@@ -49,14 +50,14 @@ class userFunctions():
                 sessionID = str(uuid.uuid4())
                 while self.checkID("_id", sessionID) == True:
                     sessionID = str(uuid.uuid4())
-                
+
                 user_info.update_one({"username": username}, {"$set": {"sessionID":self.calc_sha(sessionID)}})
                 return sessionID
             else:
                 return False
         else:
             return False
-        
+
     def logout(self, sessionID):
         sessionID = str(uuid.uuid4())
         while self.checkID("_id", sessionID) == True:
@@ -120,7 +121,7 @@ class eventFunctions():
             return True
         else:
             return False
-        
+
     def addEvent(self, title, active, caption, image, date):
         specialID = str(uuid.uuid4())
         while self.checkID("_id", specialID) == True:
@@ -136,17 +137,17 @@ class eventFunctions():
         events.update_one({"_id" : id}, {"$set":{"caption":escape(caption)}})
         events.update_one({"_id" : id}, {"$set":{"image":escape(image)}})
         events.update_one({"_id" : id}, {"$set":{"date":escape(date)}})
-        
+
     def getEvents(self):
         all_events = []
         for i in events.find({'active' : True}):
             all_events.append(i)
         all_events.reverse()
         return all_events
-        
+
     def getEvent(self, id):
         return events.find_one({"_id": id})
-    
+
 class imageFunctions():
 
     def __init__(self):
@@ -157,7 +158,7 @@ class imageFunctions():
             return True
         else:
             return False
-        
+
     def upload(self, title, location):
         specialID = str(uuid.uuid4())
         while self.checkID("_id", specialID) == True:
@@ -165,16 +166,16 @@ class imageFunctions():
         image = {"_id": specialID, "title": escape(title), "location": location}
         images.insert_one(image)
         return specialID
-    
+
     def getImage(self, id):
         return images.find_one({"_id": id})["location"]
-    
+
     def getImages(self):
         all_images = []
         for i in images.find():
             all_images.append(i)
         all_images.reverse()
         return all_images
-    
+
     def deleteImage(self, id):
         images.delete_one({"_id": id})

@@ -7,7 +7,7 @@ import os
 import bleach
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = os.environ['MONGO_CLIENT']
 app.config["SESSION_TYPE"] = "filesystem"
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -43,7 +43,7 @@ def admin():
 
     except AssertionError:
         return redirect(url_for('login'))
-        
+
 
 @app.route('/admin/add/', methods = ['POST', 'GET'])
 def addPost(id=None):
@@ -62,7 +62,7 @@ def addPost(id=None):
                 return redirect(url_for('addPost'))
         except AssertionError:
             return redirect(url_for('login'))
-        
+
     if request.method == 'GET':
         try:
             assert 'session_id' in session
@@ -97,7 +97,7 @@ def adminEdit(id=None):
             return render_template('editform.html', post=post)
         except AssertionError:
             return redirect(url_for('login'))
-    
+
 @app.route('/admin/new-user/', methods = ['POST', 'GET'])
 def newUser():
     if request.method == 'POST':
@@ -169,7 +169,7 @@ def addEvent(id=None):
                 return redirect(url_for('addEvent'))
         except AssertionError:
             return redirect(url_for('login'))
-        
+
     if request.method == 'GET':
         try:
             assert 'session_id' in session
@@ -219,9 +219,9 @@ def media():
         if request.method == 'POST':
             if 'file' not in request.files:
                 return redirect(url_for('media'))
-            
+
             file = request.files['file']
-            
+
             if file.filename == '':
                 return redirect(url_for('media'))
             title = bleach.clean(request.form['title'])
@@ -258,14 +258,14 @@ def login():
         username = bleach.clean(request.form['username'])
         password = bleach.clean(request.form['password'])
         sessionID = userFunc.login(username, password)
-        
+
         if sessionID:
             session['session_id'] = sessionID
             return redirect(url_for('admin'))
 
         else:
             return redirect(url_for('login'))
-        
+
     if request.method == 'GET':
         return render_template('login.html')
 
@@ -287,4 +287,4 @@ def logout():
         return redirect(url_for('login'))
 
 if __name__=="__main__":
-    app.run(port="8000", debug=True)
+    app.run(host='0.0.0.0', port="80")

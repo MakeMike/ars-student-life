@@ -3,21 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Media Management</title>
+    <title>Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <img src="https://ars-studentlife.netlify.app/media/pictures/ars_transparent.png" alt="Bootstrap" width="45" height="45"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="{{url_for('admin')}}">ARS Student Life</a>
+                <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+                <a class="nav-link" href="{{url_for('userManagement')}}">Users</a>
+                <a class="nav-link" href="{{url_for('media')}}">Media</a>
+            </div>
+          </div>
+        </div>
+    </nav>
 <div class="container mt-4">
 
     <div class="row">
         <div class="col-md-12 mb-4">
             <form method="POST" enctype="multipart/form-data">
                 <input id="title" class="form-control" type="text" name="title" placeholder="Enter Title of Image" required>
-                <div class="custom-file">
-                    <input name = "file" type="file" class="custom-file-input" id="imageUpload">
-                    <label class="custom-file-label" for="imageUpload">Choose an image</label>
-                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Select Media</label>
+                    <input name = "file" type="file" class="form-control" type="file" id="formFile">
+                  </div>
+                  
                 <button class="btn btn-primary mt-2" type="Submit" name="file" id="uploadButton">Upload</button>
             </form>
         </div>
