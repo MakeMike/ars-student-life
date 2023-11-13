@@ -1,0 +1,19 @@
+.carousel-image{
+    height: 99vh;
+    object-fit: cover;
+}
+@media only screen and (max-width: 768px){
+    .navbar-nav{
+        text-align: center;
+    }
+    .main{
+        max-width: 100%;
+    }
+}
+.main{
+    margin: 25px;
+    max-width: 850px;
+}
+.responsive-image{
+    width: 100%;
+}
