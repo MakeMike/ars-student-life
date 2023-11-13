@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}The Echo{% endblock %}
+{% block news %}active{% endblock %}
+{% block body %}
+<div class="container">
+<div class="row">
+{% for i in posts %}
+    <div class="col-md-4 mt-5">
+        <div class="card">
+            <img src="{{i.image}}" class="card-img-top card-img" alt="Image 1">
+            <div class="card-body">
+                <h5 class="card-title">{{i.title}}</h5>
+                <p class="card-text">{{i.date}}</p>
+                <p class="card-text">{{i.caption}}</p>
+                <a href="{{i._id}}" class="btn btn-primary">Read More!</a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+</div>
+{% endblock %}
