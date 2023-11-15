@@ -1,7 +1,6 @@
 import pymongo, uuid, hashlib
 from pymongo import MongoClient
 from datetime import datetime
-from markupsafe import escape
 import os
 cluster = MongoClient(os.environ['MONGO_CLIENT'])
 db = cluster["ARSNews"]
@@ -40,7 +39,7 @@ class userFunctions():
             specialID = str(uuid.uuid4())
             sessionID = str(uuid.uuid4())
         if self.checkID("username", username ) == False:
-            post = {"_id": specialID, "username": escape(username), "password": self.calc_sha(password), "sessionID": self.calc_sha(sessionID)}
+            post = {"_id": specialID, "username": username, "password": self.calc_sha(password), "sessionID": self.calc_sha(sessionID)}
             user_info.insert_one(post)
 
     def login(self, username, password):
@@ -84,17 +83,17 @@ class postFunctions():
             specialID = str(uuid.uuid4())
         time = datetime.now()
         time.strftime("%d %B, %Y")
-        post = {"_id": specialID, "date": time.strftime("%d %B, %Y"), "title": escape(title), "active": active, "caption": escape(caption), "image": escape(image), "content": escape(content)}
+        post = {"_id": specialID, "date": time.strftime("%d %B, %Y"), "title": title, "active": active, "caption": caption, "image": image, "content": content}
         posts.insert_one(post)
 
     def delPost(self, id):
         posts.update_one({"_id" : id}, {"$set":{"active":False}})
 
     def updatePost(self, id, title, caption, image, content):
-        posts.update_one({"_id" : id}, {"$set":{"title":escape(title)}})
-        posts.update_one({"_id" : id}, {"$set":{"caption":escape(caption)}})
-        posts.update_one({"_id" : id}, {"$set":{"image":escape(image)}})
-        posts.update_one({"_id" : id}, {"$set":{"content":escape(content)}})
+        posts.update_one({"_id" : id}, {"$set":{"title":title}})
+        posts.update_one({"_id" : id}, {"$set":{"caption":caption}})
+        posts.update_one({"_id" : id}, {"$set":{"image":image}})
+        posts.update_one({"_id" : id}, {"$set":{"content":content}})
 
     def getPosts(self):
         all_posts = []
@@ -126,17 +125,17 @@ class eventFunctions():
         specialID = str(uuid.uuid4())
         while self.checkID("_id", specialID) == True:
             specialID = str(uuid.uuid4())
-        event = {"_id": specialID, "title": escape(title), "active": active, "caption": escape(caption), "image": escape(image), "date": escape(date)}
+        event = {"_id": specialID, "title": title, "active": active, "caption": caption, "image": image, "date": date}
         events.insert_one(event)
 
     def delEvent(self, id):
         events.update_one({"_id" : id}, {"$set":{"active":False}})
 
     def updateEvent(self, id, title, caption, image, date):
-        events.update_one({"_id" : id}, {"$set":{"title":escape(title)}})
-        events.update_one({"_id" : id}, {"$set":{"caption":escape(caption)}})
-        events.update_one({"_id" : id}, {"$set":{"image":escape(image)}})
-        events.update_one({"_id" : id}, {"$set":{"date":escape(date)}})
+        events.update_one({"_id" : id}, {"$set":{"title":title}})
+        events.update_one({"_id" : id}, {"$set":{"caption":caption}})
+        events.update_one({"_id" : id}, {"$set":{"image":image}})
+        events.update_one({"_id" : id}, {"$set":{"date":date}})
 
     def getEvents(self):
         all_events = []
@@ -163,7 +162,7 @@ class imageFunctions():
         specialID = str(uuid.uuid4())
         while self.checkID("_id", specialID) == True:
             specialID = str(uuid.uuid4())
-        image = {"_id": specialID, "title": escape(title), "location": location}
+        image = {"_id": specialID, "title": title, "location": location}
         images.insert_one(image)
         return specialID
 
