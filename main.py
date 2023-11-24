@@ -28,7 +28,7 @@ def news(posts=None):
 
 @app.route('/echo/<id>/')
 def newsContent(id=None):
-    return render_template("post.html", content=md.markdown(postFunc.getContent(id)))
+    return render_template("post.html", content=md.markdown(postFunc.getContent(id)), title=postFunc.getPost(id)['title'])
 
 @app.route('/events/')
 def events():
