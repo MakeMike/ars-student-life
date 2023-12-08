@@ -50,6 +50,7 @@
                     <h5 class="card-title">{{image.title}}</h5>
                     <a href="{{url_for('image', id=image._id)}}" class="card-text">Link</a>
                     <a href="{{url_for('imageDelete', id=image._id)}}"><button class="btn btn-danger delete-button">Delete</button></a>
+                    <p>{{image.location}}</p>
                 </div>
             </div>
         </div>
